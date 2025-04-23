@@ -3,15 +3,20 @@ import pyqtgraph as pg
 from pyqtgraph.Qt import QtWidgets, QtCore
 
 generation = 0
+n = 50
 
 def update(img, label):
     global generation
     generation += 1
-    new_matrix = np.random.randint(0, 2, (20, 20)) * 255
-    img.setImage(new_matrix)
+    global n
+    matrix = matrix = [[0 for _ in range(n)] for _ in range(n)]
+    matrix[0][0] = 1
+    np_matrix = np.array(matrix, dtype=np.uint8)
+    img.setImage(np_matrix)
     label.setText(f"Generation: {generation}")
 
 def main():
+    global n
     app = QtWidgets.QApplication([])
     
     # main layout window
@@ -35,13 +40,15 @@ def main():
     layout.addWidget(graphics)
 
     # Initial Matrix
-    matrix = np.random.randint(0, 2, (20, 20)) * 255
-    img.setImage(matrix)
+    matrix = matrix = [[0 for _ in range(n)] for _ in range(n)]
+    matrix[0][0] = 1
+    np_matrix = np.array(matrix, dtype=np.uint8)
+    img.setImage(np_matrix)
 
     # timer for updating the matrix
     timer = QtCore.QTimer()
     timer.timeout.connect(lambda: update(img, label))
-    timer.start(400)
+    timer.start(500)
 
     win.show()
     QtWidgets.QApplication.instance().exec_()
