@@ -6,7 +6,9 @@ import random
 generation = 0
 n = 50
 matrix = [[0 for _ in range(n)] for _ in range(n)]
-
+# matrix[3][3] = 1
+# matrix[3][4] = 1
+# matrix[3][5] = 1
 
 def checkLive():
     global matrix
@@ -17,22 +19,16 @@ def checkLive():
             live = 0
             cur = matrix[i][j]
             # each cell has 8 neighbors (since diagonals count)
-            dirs = [[0, 1], [1, 1], [-1, 1], [-1, 0], [1, 0], [-1, -1], [-1, 0], [1, -1] ]
+            dirs = [[0, 1], [1, 1], [-1, 1], [-1, 0], [1, 0], [-1, -1], [0, -1], [1, -1] ]
             for x,y in dirs:
                 nx, ny = i+x, j+y
                 if nx >= 0 and nx < n and ny >= 0 and ny < n:
                     if matrix[nx][ny] == 1:
                         live += 1
-            if cur == 0 and live == 3:
-                nmatrix[i][j] = 1
-            elif cur == 1 and live < 2:
-                nmatrix[i][j] = 0
-            elif cur == 1 and live > 3:
-                nmatrix[i][j] = 0
-            elif cur == 1 and (live ==2 or live== 3):
-                nmatrix[i][j] = 1
+            if cur == 1:
+                nmatrix[i][j] = 1 if live in [2,3] else 0
             else:
-                nmatrix[i][j] = 0
+                nmatrix[i][j] = 1 if live == 3 else 0
     
     matrix = nmatrix
 
