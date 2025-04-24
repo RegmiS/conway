@@ -1,16 +1,48 @@
 import numpy as np
 import pyqtgraph as pg
 from pyqtgraph.Qt import QtWidgets, QtCore
+import random
 
 generation = 0
 n = 50
+matrix = [[0 for _ in range(n)] for _ in range(n)]
+
+
+def checkLive():
+    global matrix
+    global n
+    nmatrix = [[0 for _ in range(n)] for _ in range(n)]
+    for i in range(n):
+        for j in range(n):
+            live = 0
+            cur = matrix[i][j]
+            # each cell has 8 neighbors (since diagonals count)
+            dirs = [[0, 1], [1, 1], [-1, 1], [-1, 0], [1, 0], [-1, -1], [-1, 0], [1, -1] ]
+            for x,y in dirs:
+                nx, ny = i+x, j+y
+                if nx >= 0 and nx < n and ny >= 0 and ny < n:
+                    if matrix[nx][ny] == 1:
+                        live += 1
+            if cur == 0 and live == 3:
+                nmatrix[i][j] = 1
+            elif cur == 1 and live < 2:
+                nmatrix[i][j] = 0
+            elif cur == 1 and live > 3:
+                nmatrix[i][j] = 0
+            elif cur == 1 and (live ==2 or live== 3):
+                nmatrix[i][j] = 1
+            else:
+                nmatrix[i][j] = 0
+    
+    matrix = nmatrix
+
 
 def update(img, label):
     global generation
     generation += 1
     global n
-    matrix = matrix = [[0 for _ in range(n)] for _ in range(n)]
-    matrix[0][0] = 1
+    global matrix
+    checkLive()
     np_matrix = np.array(matrix, dtype=np.uint8)
     img.setImage(np_matrix)
     label.setText(f"Generation: {generation}")
@@ -40,8 +72,8 @@ def main():
     layout.addWidget(graphics)
 
     # Initial Matrix
-    matrix = matrix = [[0 for _ in range(n)] for _ in range(n)]
-    matrix[0][0] = 1
+    global matrix
+    matrix = [[random.randint(0, 1) for _ in range(n)] for _ in range(n)]
     np_matrix = np.array(matrix, dtype=np.uint8)
     img.setImage(np_matrix)
 
@@ -52,8 +84,3 @@ def main():
 
     win.show()
     QtWidgets.QApplication.instance().exec_()
-
-
-
-
-
