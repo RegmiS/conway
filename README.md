@@ -1,7 +1,8 @@
 # conway
-Conway's game of life in python
+Conway's Game of Life in Python
 <br><br>
 Goal: To learn Poetry and package management with python
+<br><br>
 Even though it seemed complex at first, Conway's rules are ultimately really simple
 - All you really do is for each node, check it's neighbors to see how many are alive
 <br><br>
